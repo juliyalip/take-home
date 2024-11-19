@@ -3,14 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://github.com/juliyalip/take-home",
+  "homepage": "https://juliyalip.github.io/take-home",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "netlify deploy -p"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.2",
