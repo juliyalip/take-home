@@ -16,15 +16,15 @@ type Actions = {
   setVisibleCards: (visibleCards: CardItem[]) => void;
   setDeletedCards: (deletedCards: CardItem[]) => void;
   deleteCard: (id: CardItem["id"]) => void;
-  openDescription: (id: CardItem['id']) => void
+  openDescription: (id: CardItem["id"]) => void;
 };
 
 export const useStoreCards = create(
   persist<State & Actions>(
     (set, get) => ({
-      visibleCards: [],
-      deletedCards: [],
-      setVisibleCards: (visibleCards) => set({ visibleCards }),
+      visibleCards: [] as CardItem[],
+      deletedCards: [] as CardItem[],
+      setVisibleCards: (visibleCards: CardItem[]) => set({ visibleCards }),
       setDeletedCards: (deletedCards) => set({ deletedCards }),
 
       deleteCard: (id: CardItem["id"]) => {
@@ -35,15 +35,21 @@ export const useStoreCards = create(
         if (cardToDelete) {
           set({
             visibleCards: visibleCards.filter((card) => card.id !== id),
-            deletedCards: [...deletedCards, { ...cardToDelete, isDeleted: true }],
+            deletedCards: [
+              ...deletedCards,
+              { ...cardToDelete, isDeleted: true },
+            ],
           });
         }
       },
-      openDescription: (id: CardItem['id']) => (set((state) => ({
-        visibleCards: state.visibleCards.map((card) =>
-          card.id === id ? { ...card, isOpenDescription: !card.isOpenDescription } : card)
-      })))
-
+      openDescription: (id: CardItem["id"]) =>
+        set((state) => ({
+          visibleCards: state.visibleCards.map((card) =>
+            card.id === id
+              ? { ...card, isOpenDescription: !card.isOpenDescription }
+              : card
+          ),
+        })),
     }),
     {
       name: "cards",
@@ -55,5 +61,3 @@ export const useStoreCards = create(
     }
   )
 );
-
-

@@ -34,14 +34,17 @@ export const Entrypoint = () => {
 
   useEffect(() => {
     if (listQuery.isSuccess && listQuery.data) {
-      const initialCards = listQuery.data
-        ?.filter((item) => item.isVisible)
+      const newCards = listQuery.data
+        .filter((item) => item.isVisible)
         .map((item) => ({
           ...item,
           isOpenDescription: false,
           isDeleted: false,
-        })) ?? [];
-        setVisibleCards(initialCards);
+        }));
+  
+      const prevIdCards = new Set(visibleCards.map((card) => card.id));
+      const uniqueNewCards = newCards.filter((card) => !prevIdCards.has(card.id));
+      setVisibleCards([...visibleCards, ...uniqueNewCards]);
     }
   }, [listQuery.data, listQuery.isSuccess, setVisibleCards]);
 
