@@ -1,19 +1,24 @@
 import { FC } from "react";
 import { XMarkIcon } from "./icons";
 
-type ButtonProps = React.ComponentProps<"button">;
+type ButtonProps<T extends (...args: any[]) => void> = Omit<
+  React.ComponentProps<"button">,
+  "onClick"
+> & {
+  onAction: T; 
+};
 
-export const ExpandButton: FC<ButtonProps> = ({ children, ...props }) => {
+export const ExpandButton:  FC<ButtonProps<() => void>> = ({ children, onAction, ...props }) => {
   return (
-    <button className="hover:text-gray-700 transition-colors flex items-center justify-center" {...props}>
+    <button onClick={onAction} className="hover:text-gray-700 transition-colors flex items-center justify-center" {...props}>
       {children}
     </button>
   );
 };
 
-export const DeleteButton: FC<Omit<ButtonProps, "children">> = (props) => {
+export const DeleteButton: FC<ButtonProps<() => void>> = ({ onAction,  ...props }) => {
   return (
-    <button className="hover:text-gray-700 transition-colors flex items-center justify-center" {...props}>
+    <button onClick={onAction} className="hover:text-gray-700 transition-colors flex items-center justify-center" {...props}>
       <XMarkIcon />
     </button>
   );

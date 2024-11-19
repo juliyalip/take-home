@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { ListItem } from "./api/getListData";
 
-type CardItem = ListItem & {
+export type CardItem = ListItem & {
   isOpenDescription: boolean;
   isDeleted: boolean;
 };
@@ -16,6 +16,7 @@ type Actions = {
   setVisibleCards: (visibleCards: CardItem[]) => void;
   setDeletedCards: (deletedCards: CardItem[]) => void;
   deleteCard: (id: CardItem["id"]) => void;
+  openDescription: (id: CardItem['id'])=> void
 };
 
 export const useStoreCards = create(
@@ -25,9 +26,12 @@ export const useStoreCards = create(
       deletedCards: [],
       setVisibleCards: (visibleCards) => set({ visibleCards }),
       setDeletedCards: (deletedCards) => set({ deletedCards }),
+
          deleteCard: (id: CardItem["id"]) => {
         const { visibleCards, deletedCards } = get();
+
         const cardToDelete = visibleCards.find((card) => card.id === id);
+
         if (cardToDelete) {
           set({
             visibleCards: visibleCards.filter((card) => card.id !== id),
@@ -35,6 +39,13 @@ export const useStoreCards = create(
           });
         }
       },
+      openDescription: (id: CardItem['id'])=> (set((state)=>({
+        visibleCards: state.visibleCards.map((card)=>
+        card.id === id? {...card, isOpenDescription: !card.isOpenDescription} : card)
+      })))
+
+    
+
     }),
     {
       name: "cards", 
